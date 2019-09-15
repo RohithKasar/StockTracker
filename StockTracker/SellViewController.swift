@@ -86,13 +86,13 @@ class SellViewController: UIViewController {
         if (dateField.text != "") {
             sellDate = dateField.text!
         }
-        DB_BASE.child("Transactions").child(transaction.transactionID).child("sellValue").setValue(sellPrice)
-        DB_BASE.child("Transactions").child(transaction.transactionID).child("sellDate").setValue(sellDate)
-        DB_BASE.child("Transactions").child(transaction.transactionID).child("sellAmount").setValue(sellAmount)
+        DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Transactions").child(transaction.transactionID).child("sellValue").setValue(sellPrice)
+        DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Transactions").child(transaction.transactionID).child("sellDate").setValue(sellDate)
+        DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Transactions").child(transaction.transactionID).child("sellAmount").setValue(sellAmount)
         
-        DataService.instance.fetchStocks { (paramStocks) in
+        DataService.instance.fetchStocks(forUser: DummyUser.globalVariable.id) { (paramStocks) in
             self.stockList = paramStocks
-            var stockID = self.DB_BASE.child("Stocks").childByAutoId()
+            var stockID = self.DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Stocks").childByAutoId()
             var currentPositions = 0
             
             
@@ -102,7 +102,7 @@ class SellViewController: UIViewController {
                 if (stock.name == self.transaction.name) {
                     
                     currentPositions = stock.positions - Int(self.transaction.amount)
-                    stockID = self.DB_BASE.child("Stocks").child(stock.key)
+                    stockID = self.DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Stocks").child(stock.key)
                     
                 }
             }

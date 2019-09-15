@@ -30,7 +30,7 @@ class StockDetailsController: UIViewController, UITableViewDataSource, UITableVi
         
         //DataService.instance.fetchPrivateEvents(forUser: currentUser) { (paramPrivateEvents) in
         
-        DataService.instance.fetchTransactions(forStock: stock) { (transactionArray) in
+        DataService.instance.fetchTransactions(forUser: DummyUser.globalVariable.id, forStock: stock) { (transactionArray) in
             self.transactionList = transactionArray.reversed()
             self.detailsTableView.reloadData()
         }
@@ -73,7 +73,7 @@ class StockDetailsController: UIViewController, UITableViewDataSource, UITableVi
         super.viewDidAppear(animated)
         
         
-        DataService.instance.fetchTransactions(forStock: stock) { (transactionArray) in
+        DataService.instance.fetchTransactions(forUser: DummyUser.globalVariable.id, forStock: stock) { (transactionArray) in
             self.transactionList = transactionArray.reversed()
             
             self.detailsTableView.reloadData()
@@ -94,13 +94,13 @@ class StockDetailsController: UIViewController, UITableViewDataSource, UITableVi
         
         
         //cell.detailsLabel.text = transaction.name
-        
-        let stringPrice = String(transaction.price)
+        let roundedPrice = Double(round(100*transaction.price)/100)
+        let stringPrice = String(roundedPrice)
         let stringAmount = String(transaction.amount)
         let profit = (transaction.sellValue - transaction.price) * Double(transaction.sellAmount)
         let roundedProfit = Double(round(1000*profit)/1000)
         
-        cell.detailsLabel.text = ("Buying " + stringAmount + " " + transaction.name + " at " + stringPrice + " on " + transaction.date)
+        cell.detailsLabel.text = ("Bought " + stringAmount + " " + transaction.name + " at " + stringPrice + " on " + transaction.date)
         if (transaction.sellDate != "") {
             let part1 = "Bought " + stringAmount + " " + transaction.name + " at " + stringPrice + " on " + transaction.date + "\n"
             let part2 = "Sold " + stringAmount + " " + transaction.name + " at " + String(transaction.sellValue) + " on " + transaction.sellDate + "\n"

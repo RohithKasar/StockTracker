@@ -27,6 +27,9 @@
 		3A55CE0122D9282B00118476 /* StockDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A55CE0022D9282B00118476 /* StockDetailsController.swift */; };
 		3A76688022EFCDCF001DC529 /* SellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A76687F22EFCDCF001DC529 /* SellViewController.swift */; };
 		3AA0DA0B22F8FF630043567E /* FirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA0DA0A22F8FF630043567E /* FirmViewController.swift */; };
+		3AB39567230B6985004A33F6 /* userInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB39566230B6985004A33F6 /* userInfo.swift */; };
+		3AB73A52230B63EC00E919B0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB73A51230B63EC00E919B0 /* SettingsViewController.swift */; };
+		3AB73A54230B648500E919B0 /* FirmCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB73A53230B648500E919B0 /* FirmCell.swift */; };
 		3AFF191F22D9217800455D1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFF191E22D9217800455D1D /* AppDelegate.swift */; };
 		3AFF192122D9217800455D1D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFF192022D9217800455D1D /* ViewController.swift */; };
 		3AFF192422D9217800455D1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AFF192222D9217800455D1D /* Main.storyboard */; };
@@ -68,6 +71,9 @@
 		3A55CE0022D9282B00118476 /* StockDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailsController.swift; sourceTree = "<group>"; };
 		3A76687F22EFCDCF001DC529 /* SellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellViewController.swift; sourceTree = "<group>"; };
 		3AA0DA0A22F8FF630043567E /* FirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmViewController.swift; sourceTree = "<group>"; };
+		3AB39566230B6985004A33F6 /* userInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = userInfo.swift; sourceTree = "<group>"; };
+		3AB73A51230B63EC00E919B0 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		3AB73A53230B648500E919B0 /* FirmCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmCell.swift; sourceTree = "<group>"; };
 		3AFF191B22D9217800455D1D /* StockTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AFF191E22D9217800455D1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AFF192022D9217800455D1D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +150,7 @@
 		3AFF191D22D9217800455D1D /* StockTracker */ = {
 			isa = PBXGroup;
 			children = (
+				3AB73A51230B63EC00E919B0 /* SettingsViewController.swift */,
 				3AFF191E22D9217800455D1D /* AppDelegate.swift */,
 				3A23837A22DD3C78003F4012 /* CreateTransactionViewController.swift */,
 				3A2B71DC22DEB26D00C3DEB8 /* DataService.swift */,
@@ -151,7 +158,9 @@
 				3A2B71D822DEA8CC00C3DEB8 /* Transaction.swift */,
 				3AFF192022D9217800455D1D /* ViewController.swift */,
 				3AFF192222D9217800455D1D /* Main.storyboard */,
+				3AB73A53230B648500E919B0 /* FirmCell.swift */,
 				3AA0DA0A22F8FF630043567E /* FirmViewController.swift */,
+				3AB39566230B6985004A33F6 /* userInfo.swift */,
 				3A76687F22EFCDCF001DC529 /* SellViewController.swift */,
 				3A23837822D93376003F4012 /* DetailsCell.swift */,
 				3A55CE0022D9282B00118476 /* StockDetailsController.swift */,
@@ -473,7 +482,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AA0DA0B22F8FF630043567E /* FirmViewController.swift in Sources */,
+				3AB73A54230B648500E919B0 /* FirmCell.swift in Sources */,
 				3A2B71DD22DEB26D00C3DEB8 /* DataService.swift in Sources */,
+				3AB39567230B6985004A33F6 /* userInfo.swift in Sources */,
 				3A23837922D93376003F4012 /* DetailsCell.swift in Sources */,
 				3AFF192122D9217800455D1D /* ViewController.swift in Sources */,
 				3A2B71D922DEA8CC00C3DEB8 /* Transaction.swift in Sources */,
@@ -482,6 +493,7 @@
 				3A23837B22DD3C78003F4012 /* CreateTransactionViewController.swift in Sources */,
 				3A55CE0122D9282B00118476 /* StockDetailsController.swift in Sources */,
 				3A55CDFF22D926E500118476 /* StockCell.swift in Sources */,
+				3AB73A52230B63EC00E919B0 /* SettingsViewController.swift in Sources */,
 				3A2B71E122E7F0A600C3DEB8 /* Stock.swift in Sources */,
 				3AFF191F22D9217800455D1D /* AppDelegate.swift in Sources */,
 			);
@@ -666,6 +678,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J2L2WGBT6L;
 				INFOPLIST_FILE = StockTracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -684,6 +697,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J2L2WGBT6L;
 				INFOPLIST_FILE = StockTracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

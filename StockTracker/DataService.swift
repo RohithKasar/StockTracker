@@ -26,10 +26,10 @@ class DataService {
     
    
     
-    func fetchStocks(handler: @escaping ( _ stocks: [Stock]) -> ()) {
+    func fetchStocks(forUser userId: String, handler: @escaping ( _ stocks: [Stock]) -> ()) {
         var stockArray = [Stock]()
         let DB_BASE = Database.database().reference()
-        let REF_STOCK = DB_BASE.child("Stocks")
+        let REF_STOCK = DB_BASE.child("Users").child(userId).child("Stocks")
         REF_STOCK.observeSingleEvent(of: .value) { (allStocksSnapshot) in
             guard let allStocksSnapshot = allStocksSnapshot.children.allObjects as? [DataSnapshot] else { return }
             for stock in allStocksSnapshot {
@@ -48,12 +48,29 @@ class DataService {
         }
     }
     
+    func fetchFirms(forUser userId: String, handler: @escaping ( _ stocks: [String]) -> ()) {
+        var firmArray = [String]()
+        let DB_BASE = Database.database().reference()
+        let REF_FIRMS = DB_BASE.child("Users").child(userId).child("Firms")
+        REF_FIRMS.observeSingleEvent(of: .value) { (allFirmsSnapshot) in
+            guard let allFirmsSnapshot = allFirmsSnapshot.children.allObjects as? [DataSnapshot] else { return }
+            for firm in allFirmsSnapshot {
+                let name = firm.childSnapshot(forPath: "name").value as! String
+                
+                firmArray.append(name)
+                
+            }
+            
+            handler(firmArray)
+        }
+    }
     
     
-    func fetchTransactions(forStock stockName: String, handler: @escaping ( _ transactions: [Transaction]) -> ()) {
+    
+    func fetchTransactions(forUser userId: String, forStock stockName: String, handler: @escaping ( _ transactions: [Transaction]) -> ()) {
         var transactionArray = [Transaction]()
         let DB_BASE = Database.database().reference()
-        let REF_TRANSACTIONS = DB_BASE.child("Transactions")
+        let REF_TRANSACTIONS = DB_BASE.child("Users").child(userId).child("Transactions")
         
         REF_TRANSACTIONS.observeSingleEvent(of : .value) { (allTransactionsSnapshot) in
             guard let allTransactionsSnapshot = allTransactionsSnapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -87,6 +104,16 @@ class DataService {
             
             handler(transactionArray)
         }
+    }
+    
+    func pushUser(name : String, email : String, id : String,
+                  uploadComplete: @escaping (_ status: Bool) -> ()) {
+        let DB_BASE = Database.database().reference()
+        let userData : [String: Any?] = ["name": name, "email":email, "id":id, "org":"temp", "personalEvents" : ["hib":"hob"]]
+        
+        DB_BASE.child("Users").child(id).updateChildValues(userData as [AnyHashable : Any])
+        uploadComplete(true)
+        
     }
     
    

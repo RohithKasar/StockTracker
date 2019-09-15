@@ -13,7 +13,9 @@ import FirebaseDatabase
 let DB_BASE = Database.database().reference()
 
 
-class CreateTransactionViewController: UIViewController {
+class CreateTransactionViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    
 
     var stockList = [Stock]()
     @IBOutlet weak var nameField: UITextField!
@@ -21,6 +23,9 @@ class CreateTransactionViewController: UIViewController {
     @IBOutlet weak var amountField: UITextField!
     @IBOutlet weak var firmField: UITextField!
     @IBOutlet weak var dateField: UITextField!
+    var firmList = [String]()
+    
+    var picker = UIPickerView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,37 +34,99 @@ class CreateTransactionViewController: UIViewController {
         formatter.dateFormat = "MM/dd/yyyy"
         let result = formatter.string(from: date)
         dateField.placeholder = result
-        let ref = Database.database().reference().child("firms")
-        /*REF_STOCK.observeSingleEvent(of: .value) { (allStocksSnapshot) in
-            guard let allStocksSnapshot = allStocksSnapshot.children.allObjects as? [DataSnapshot] else { return }
-            for stock in allStocksSnapshot {
-                let name = stock.childSnapshot(forPath: "name").value as! String
-                let date = stock.childSnapshot(forPath: "date").value as! String
-                let stringPositions = stock.childSnapshot(forPath: "positions").value as! String
-                let firm = stock.childSnapshot(forPath: "firm").value as! String
-                let key = (stock.key)
-                
-                let positions = Int(stringPositions) ?? 0
-                let stock: Stock = Stock(name: name, date: date, key : key, positions: positions, firm: firm)
-                stockArray.append(stock)
-            }
-            
-            handler(stockArray)
-        }*/
         
-        ref.observeSingleEvent(of: .value) { (allFirmsSnapshot) in
-            guard let allFirmsSnapshot = allFirmsSnapshot.children.allObjects as? [DataSnapshot] else { return }
-            for firm in allFirmsSnapshot {
-                let text = firm.childSnapshot(forPath: "list").value as! String
-                self.firmField.placeholder = text
-            }
-            
-            
-            
+        DataService.instance.fetchFirms(forUser: DummyUser.globalVariable.id) { (firmArray) in
+            self.firmList = firmArray
             
         }
         
-        // Do any additional setup after loading the view.
+        picker.delegate = self
+        picker.dataSource = self
+        
+        firmField.inputView = picker
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.size.width, width: self.view.frame.size.height/6, height: 40.0))
+        
+        toolBar.layer.position = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-20.0)
+        //toolBar.barStyle = UIBarStyle.blackTranslucent
+        //toolBar.tintColor = UIColor.white
+        //toolBar.backgroundColor = UIColor.black
+        
+        let defaultButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItem.Style.plain, target: self, action: #selector(cancelPressed))
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(donePressed))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width / 3, height: self.view.frame.size.height))
+        label.font = UIFont(name: "Helvetica", size: 12)
+        label.backgroundColor = UIColor.clear
+        label.textColor = UIColor.blue
+        //label.text = "Select your organization"
+        label.textAlignment = NSTextAlignment.center
+        
+        let textBtn = UIBarButtonItem(customView: label)
+        
+        toolBar.setItems([defaultButton,flexSpace,textBtn,flexSpace,doneButton], animated: true)
+        
+        firmField.inputAccessoryView = toolBar
+        
+ 
+        
+        
+        
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //AppDelegate.AppUtility.lockOrientation(.portrait)
+    }
+    
+    @objc func cancelPressed(sender: UIBarButtonItem) {
+        firmField.text = ""
+        firmField.resignFirstResponder()
+    }
+    
+    @objc func donePressed(sender: UIBarButtonItem) {
+        firmField.resignFirstResponder()
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return firmList.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return firmList[row]
+    }
+    
+    
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        let month = timeOption[0][picker.selectedRow(inComponent: 0)]
+//        let day = timeOption[1][picker.selectedRow(inComponent: 1)]
+//        let hour = timeOption[2][picker.selectedRow(inComponent: 2)]
+//        let minute = timeOption[3][picker.selectedRow(inComponent: 3)]
+//        let period = timeOption[4][picker.selectedRow(inComponent: 4)]
+        //timeField.text = month + "/" + day + " " + hour + ":" + minute + " " + period
+        
+        let firm = firmList[picker.selectedRow(inComponent: 0)]
+        firmField.text = firm
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.isNavigationBarHidden = false
+        
+        super.viewWillDisappear(animated)
+        
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
@@ -85,8 +152,8 @@ class CreateTransactionViewController: UIViewController {
         
         
         //DATABASE STUFF
-        let transactionID = DB_BASE.child("Transactions").childByAutoId()
-        let transactionData :[String: Any] = ["name": name, "amount": amount, "price": price, "date": dateString, "firm":firm, "portfolio":portfolio, "transactionID": transactionID.description().dropFirst(54), "sellDate": "", "sellValue" : "", "sellAmount": ""]
+        let transactionID = DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Transactions").childByAutoId()
+        let transactionData :[String: Any] = ["name": name, "amount": amount, "price": price, "date": dateString, "firm":firm, "portfolio":portfolio, "transactionID": transactionID.description().dropFirst(89), "sellDate": "", "sellValue" : "", "sellAmount": ""]
         transactionID.updateChildValues(transactionData as [AnyHashable: Any])
         
         //pull all stocks and see if it exists yet. if it exists, update positioning, if not, add it to list
@@ -94,9 +161,9 @@ class CreateTransactionViewController: UIViewController {
         var currentPositions = Int(amount)!
         var firmList = firm
         
-        DataService.instance.fetchStocks { (paramStocks) in
+        DataService.instance.fetchStocks(forUser: DummyUser.globalVariable.id) { (paramStocks) in
             self.stockList = paramStocks
-            var stockID = DB_BASE.child("Stocks").childByAutoId()
+            var stockID = DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Stocks").childByAutoId()
             
             
             let myStock = Stock(name: name, date: dateString, key: "", positions: 1, firm: "")
@@ -106,7 +173,7 @@ class CreateTransactionViewController: UIViewController {
                 if (stock.name == name) {
                     
                     currentPositions = stock.positions + Int(amount)!
-                    stockID = DB_BASE.child("Stocks").child(stock.key)
+                    stockID = DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Stocks").child(stock.key)
                     firmList = firmList + ", " + stock.firm
                     
                     if (stock > myStock) {

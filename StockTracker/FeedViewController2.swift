@@ -1,20 +1,18 @@
 //
-//  FeedViewController.swift
+//  FeedViewController2.swift
 //  StockTracker
 //
-//  Created by Rohith Kasar on 7/12/19.
+//  Created by Rohith Kasar on 8/26/19.
 //  Copyright © 2019 rohith.kasar. All rights reserved.
 //
 
 import UIKit
 import Firebase
 
-class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FeedViewController2: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var stockList = [Stock]()
     let DB_BASE = Database.database().reference()
-    
-    
 
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
@@ -46,17 +44,14 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.tableView.reloadData()
         }
         self.tableView.reloadData()
-        
     }
     
-    
-    @IBAction func signOut(_ sender: Any) {
-        do {
-            try Auth.auth().signOut()
-            performSegue(withIdentifier: "signOutSegue", sender: self)
-        } catch {
-            print(error)
-        }
+
+    @IBAction func settingsClicked(_ sender: Any) {
+        performSegue(withIdentifier: "settingsSegue", sender: self)
+    }
+    @IBAction func plusClicked(_ sender: Any) {
+        performSegue(withIdentifier: "publishSeuge", sender: self)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -83,22 +78,13 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
-    @IBAction func plusClicked(_ sender: Any) {
-        performSegue(withIdentifier: "publishSeuge", sender: self)
-    }
-    
-    
-    @IBAction func settingsClicked(_ sender: Any) {
-        performSegue(withIdentifier: "settingsSegue", sender: self)
-    }
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        if (segue.identifier == "detailsSegue") {
+        if (segue.identifier == "showDetails") {
             let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPath(for: cell)!
             
@@ -109,10 +95,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             
         }
-        
-        
-        
-        
     }
     
 

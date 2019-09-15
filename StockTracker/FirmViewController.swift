@@ -25,11 +25,14 @@ class FirmViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     @IBAction func doneClicked(_ sender: Any) {
-        //var firmList = firmField.text!.split(separator: ",")
-        DB_BASE.child("firms").childByAutoId().updateChildValues(["list" : firmField.text!])
+        let firm = firmField.text!
+        //DB_BASE.child("Users").child(DummyUser.globalVariable.id).updateChildValues(["firms": firm])
+        DB_BASE.child("Users").child(DummyUser.globalVariable.id).child("Firms").childByAutoId().updateChildValues(["name":firm])
+        //DB_BASE.child("firms").childByAutoId().updateChildValues(["list" : firmField.text!])
         //DB_BASE.child("firms").childByAutoId().setValue(firmField.text!)
+        //dismiss(animated: true, completion: nil)
+        //performSegue(withIdentifier: "backHome", sender: self)
         dismiss(animated: true, completion: nil)
-        
     }
     /*
     // MARK: - Navigation
